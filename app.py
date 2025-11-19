@@ -10,7 +10,7 @@ TELEGRAM_BOT_TOKEN = '5477889304:AAGIrBexQdhdzlXWWoyrOVcjNdPKLh7WP_o'
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 
 # GitHub Configuration
-GITHUB_TOKEN = 'YOUR_GITHUB_PERSONAL_ACCESS_TOKEN'
+GITHUB_TOKEN = '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'
 GITHUB_OWNER = 'Mythesis002'
 GITHUB_REPO = 'test-telegram-msg'
 WORKFLOW_FILENAME = 'post_reel.yml'
