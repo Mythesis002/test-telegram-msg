@@ -13,7 +13,7 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 GITHUB_TOKEN = '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'
 GITHUB_OWNER = 'Mythesis002'
 GITHUB_REPO = 'test-telegram-msg'
-WORKFLOW_FILENAME = 'post_reel.yml'
+WORKFLOW_FILENAME = 'main.yml'
 # ---------------------
 
 def trigger_github_workflow(message_text):
