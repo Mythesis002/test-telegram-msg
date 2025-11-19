@@ -12,7 +12,7 @@ TELEGRAM_BOT_TOKEN = '5477889304:AAGIrBexQdhdzlXWWoyrOVcjNdPKLh7WP_o'
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 
 # GitHub Configuration
-GITHUB_TOKEN = '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'
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 GITHUB_OWNER = 'Mythesis002'
 GITHUB_REPO = 'test-telegram-msg'
 WORKFLOW_FILENAME = 'main.yml'
@@ -36,9 +36,10 @@ def trigger_github_action(text):
 
     url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/actions/workflows/main.yml/dispatches"
     headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
+    "Authorization": f"Bearer {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
     }
+
     data = {"ref": "main", "inputs": {"telegram_msg": text}}
     
     try:
