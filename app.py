@@ -12,7 +12,7 @@ TELEGRAM_BOT_TOKEN = '5477889304:AAGIrBexQdhdzlXWWoyrOVcjNdPKLh7WP_o'
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 
 # GitHub Configuration
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_TOKEN = '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'
 GITHUB_OWNER = 'Mythesis002'
 GITHUB_REPO = 'test-telegram-msg'
 WORKFLOW_FILENAME = 'main.yml'
