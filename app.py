@@ -15,7 +15,7 @@ TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 
 GITHUB_OWNER = 'Mythesis002'
-GITHUB_REPO = 'test-telegram-msg'
+GITHUB_REPO = 'autopost.ai'
 WORKFLOW_FILENAME = 'main.yml'
 PUBLIC_URL = 'https://test-telegram-msg-production.up.railway.app/'
 # ---------------------
