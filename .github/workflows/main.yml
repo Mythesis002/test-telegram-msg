@@ -1,0 +1,37 @@
+name: Post Instagram Reel Daily
+
+on:
+  # Daily schedule (runs automatically at 5:30 UTC / 10:30 IST)
+  schedule:
+    - cron: "30 5 * * *"
+  
+  # Manual trigger via API or GitHub UI
+  workflow_dispatch:
+    inputs:
+      telegram_msg:
+        description: 'Caption or message from Telegram'
+        required: false
+        default: ''
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Python Script
+        env:
+          # We pass the input to the script as an Environment Variable
+          # If the workflow runs on schedule (no input), this variable will be empty.
+          INSTAGRAM_CAPTION: ${{ inputs.telegram_msg }}
+        run: python instagram_post.py
