@@ -28,6 +28,12 @@ def trigger_github_action(text):
         log("❌ Error: GitHub Configuration is missing.")
         return
 
+    # --- DEBUGGING: PRINT TOKEN START ---
+    # This helps us see if Railway is using the new token or the old one.
+    token_start = GITHUB_TOKEN[:4] if GITHUB_TOKEN else "None"
+    log(f"🔑 Using Token starting with: {token_start}...") 
+    # ------------------------------------
+
     url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/actions/workflows/main.yml/dispatches"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
@@ -43,8 +49,6 @@ def trigger_github_action(text):
         log(f"❌ Error Triggering GitHub: {e}")
         if hasattr(e, 'response') and e.response is not None:
             log(f"GitHub Response: {e.response.text}")
-
-@app.route('/', methods=['GET'])
 def index():
     """Home page checks status."""
     log("Someone accessed the Home Page")
