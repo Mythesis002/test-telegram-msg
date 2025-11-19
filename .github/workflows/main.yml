@@ -1,10 +1,6 @@
 name: Post Instagram Reel Daily
 
 on:
-  # Daily schedule (runs automatically at 5:30 UTC / 10:30 IST)
-  schedule:
-    - cron: "30 5 * * *"
-  
   # Manual trigger via API or GitHub UI
   workflow_dispatch:
     inputs:
