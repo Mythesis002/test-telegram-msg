@@ -14,6 +14,7 @@ GITHUB_TOKEN = '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'
 GITHUB_OWNER = 'Mythesis002'
 GITHUB_REPO = 'test-telegram-msg'
 WORKFLOW_FILENAME = 'main.yml'
+PUBLIC_URL = 'https://test-telegram-msg-production.up.railway.app/'
 # ---------------------
 
 def trigger_github_action(text):
