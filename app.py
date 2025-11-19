@@ -16,65 +16,47 @@ GITHUB_REPO = 'test-telegram-msg'
 WORKFLOW_FILENAME = 'main.yml'
 # ---------------------
 
-def trigger_github_workflow(message_text):
-    """Sends a dispatch event to GitHub Actions."""
-    url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/actions/workflows/{WORKFLOW_FILENAME}/dispatches"
-    
+def trigger_github_action(text):
+    url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/actions/workflows/main.yml/dispatches"
     headers = {
         "Authorization": f"Bearer {GITHUB_TOKEN}",
         "Accept": "application/vnd.github.v3+json"
     }
+    data = {"ref": "main", "inputs": {"telegram_msg": text}}
     
-    payload = {
-        "ref": "main",  # Ensure this matches your default branch
-        "inputs": {
-            "telegram_msg": message_text
-        }
-    }
-
     try:
-        response = requests.post(url, json=payload, headers=headers)
-        response.raise_for_status() # Raise an error for bad status codes
-        print(f"Successfully triggered GitHub Action! Status Code: {response.status_code}")
-    except requests.exceptions.RequestException as e:
-        print(f"Failed to trigger GitHub Action: {e}")
-        if e.response is not None:
-             print(f"GitHub Response: {e.response.text}")
+        resp = requests.post(url, json=data, headers=headers)
+        resp.raise_for_status()
+        print(f"✅ GitHub Triggered: {text}")
+    except Exception as e:
+        print(f"❌ Error Triggering GitHub: {e}")
+
+@app.route('/', methods=['GET'])
+def index():
+    """Accessing the root URL manually sets the webhook."""
+    if not PUBLIC_URL or not TELEGRAM_BOT_TOKEN:
+        return "Missing Variables (PUBLIC_URL or TELEGRAM_BOT_TOKEN)", 500
+    
+    # Set Webhook
+    webhook_url = f"{PUBLIC_URL}/webhook"
+    telegram_url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/setWebhook"
+    
+    try:
+        response = requests.post(telegram_url, json={"url": webhook_url})
+        return f"Bot is Running! <br>Webhook Response: {response.text}"
+    except Exception as e:
+        return f"Bot Running, but Webhook Failed: {e}"
 
 @app.route('/webhook', methods=['POST'])
-def webhook():
-    """Handle incoming updates from Telegram."""
-    data = request.get_json()
-    
-    if not data:
-        return jsonify({"status": "error", "message": "No data received"}), 400
-
-    # Check if the update contains a message with text
-    message = data.get('message', {})
-    text = message.get('text')
-
-    if text:
-        print(f"Received message: {text}")
-        trigger_github_workflow(text)
-
+def receive_telegram_msg():
+    update = request.get_json()
+    if update and "message" in update:
+        text = update["message"].get("text")
+        if text:
+            print(f"📩 Message: {text}")
+            trigger_github_action(text)
     return "OK", 200
 
-def set_webhook():
-    """Sets the Telegram webhook URL."""
-    # NOTE: Replace with your PUBLIC URL (e.g., https://your-app.onrender.com/webhook)
-    # Localhost will NOT work for Telegram.
-    webhook_url = "https://YOUR_PUBLIC_URL.com/webhook" 
-    
-    try:
-        response = requests.post(f"{TELEGRAM_API_URL}/setWebhook", json={"url": webhook_url})
-        print(f"Webhook set response: {response.text}")
-    except Exception as e:
-        print(f"Error setting webhook: {e}")
-
 if __name__ == '__main__':
-    # Optional: Set webhook on startup (useful for development/first deploy)
-    # set_webhook() 
-    
     port = int(os.environ.get('PORT', 3000))
-    print(f"Server is running on port {port}")
     app.run(host='0.0.0.0', port=port)
